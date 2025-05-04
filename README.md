@@ -40,30 +40,39 @@ You get:
 - Download and install Ollama for your OS
 - Start Ollama in the background (ollama run llama3)
 
+---
+
 ### Step 3: Clone the project and Navigate to it
 git clone https://github.com/yourusername/factify.git
 cd factify
+
+---
 
 ### Step 4: Create and Activate a Virtual Environment
 
 #### Create virtual environment
 python -m venv venv
 
-##### Activate it
+#### Activate it
 venv\Scripts\activate         # On Windows
 #### OR
 source venv/bin/activate      # On Mac/Linux
+
+---
 
 ### Step 5: Install Requirements
 pip install --upgrade pip
 pip install -r requirements.txt
 
+---
+
 ### Step 6: Run the App
 python app.py
 
+---
+
 ## Project Structure
-'''
-.
+```
 FACTIFY/
 └── root/
 ├── pycache/ # Compiled Python cache
@@ -77,4 +86,4 @@ FACTIFY/
 ├── examples.py # Gradio preloaded examples
 ├── README.md # Project documentation
 └── requirements.txt # Python dependencies
-'''
+```
