@@ -46,34 +46,35 @@ cd factify
 
 ### Step 4: Create and Activate a Virtual Environment
 
-# Create virtual environment
+#### Create virtual environment
 python -m venv venv
 
-# Activate it
+##### Activate it
 venv\Scripts\activate         # On Windows
-# OR
+#### OR
 source venv/bin/activate      # On Mac/Linux
 
 ### Step 5: Install Requirements
 pip install --upgrade pip
 pip install -r requirements.txt
 
-### Run the App
+### Step 6: Run the App
 python app.py
 
 ## Project Structure
-
+'''
+.
 FACTIFY/
-├── root/
-│ ├── pycache/ # Compiled Python files
-│ ├── flagged/ # Gradio logs or flagged examples
-│ ├── images/ # Sample news screenshots
-│ │ ├── ...
-│ │ ├── ...
-│ │ └── ...
-│ ├── venv/ # Python virtual environment
-│ ├── app.py # Main application
-│ ├── examples.py # Gradio example inputs
-│ ├── README.md # Project documentation
-│ └── requirements.txt # Python dependencies
-
+└── root/
+├── pycache/ # Compiled Python cache
+├── flagged/ # Gradio logs or flagged outputs
+├── images/ # Sample news screenshots
+│ ├── article1.jpeg
+│ ├── article2.png
+│ └── article4.jpg
+├── venv/ # Python virtual environment (not pushed to Git)
+├── app.py # Main application
+├── examples.py # Gradio preloaded examples
+├── README.md # Project documentation
+└── requirements.txt # Python dependencies
+'''
