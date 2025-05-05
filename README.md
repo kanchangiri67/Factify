@@ -53,9 +53,11 @@ python --version
 ```
 ##### MacOS
 
+```
 brew install python@3.10
 echo 'alias python="python3.10"' >> ~/.zshrc
 source ~/.zshrc
+```
 
 ### Step 2: Install Ollama
 
