@@ -4,7 +4,7 @@ Factify is a lightweight AI-powered application that classifies news articles as
 
 It combines:
 - `PaddleOCR` for extracting text from images
-- `Ollama` for running local LLMs like TinyLLaMA
+- `Ollama` for running local LLMs like TinyLLaMA or larger models like Llama3
 - `Gradio` to provide a sleek and interactive web UI
 
 How it Works:
@@ -23,16 +23,39 @@ You get:
 
 ## Step-by-Step Setup Guide
 
-> Works on **Windows**, **macOS**, and **Linux**  
+> Works on **Windows** and **macOS**
 > Tested with **Python 3.10** (not compatible with Python 3.12+)
+> **Python 3.10** used to run PaddleOCR smoothly.
 
 ---
 
 ### Step 1: Install Python 3.10
 
-- Download from: https://www.python.org/downloads/release/python-3100/ for your OS
+Factify requires Python 3.10 for compatibility with PaddleOCR and other tools. Follow these steps to install and use it.
 
----
+#### Download and Install Python 3.10
+
+Download it here:  
+https://www.python.org/downloads/release/python-3100/
+
+#####  Windows
+
+1. Download Windows Installer (64-bit).
+2. Check "Add Python 3.10 to PATH" during installation.
+3. Enable pip and environment variables.
+4. Complete the install.
+
+Verify:
+
+```bash
+python --version
+# Should output: Python 3.10.x
+```
+##### MacOS
+
+brew install python@3.10
+echo 'alias python="python3.10"' >> ~/.zshrc
+source ~/.zshrc
 
 ### Step 2: Install Ollama
 
