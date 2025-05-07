@@ -4,7 +4,12 @@ import numpy as np
 import gradio as gr
 import ollama
 import io
-from examples import examples
+import re
+
+#Local imports
+from examples import examples as examples_raw
+from theme.factify_theme import custom_theme
+
 
 # Initialize PaddleOCR (CPU version)
 ocr_engine = PaddleOCR(use_angle_cls=True, lang='en', use_gpu=False)
@@ -22,6 +27,8 @@ News Content:
 {article}
 
 Return your response in this format:
+Here's my full analysis: 
+
 Label: REAL or FAKE
 Confidence: [1% to 100%]
 Reason: [short explanation]
@@ -42,7 +49,7 @@ def extract_text_from_image(img):
         return None, None
 
 def classify_input(image, headline, article):
-    if image is not None:
+    if image is not None and isinstance(image, np.ndarray):
         headline, article_text = extract_text_from_image(image)
         if not headline or not article_text:
             return "Could not extract enough text from image."
@@ -58,27 +65,84 @@ def classify_input(image, headline, article):
             model='llama3',
             messages=[{"role": "user", "content": prompt}]
         )
-        return response['message']['content']
+        content = response['message']['content']
+        label, confidence, explanation = extract_facts(content)
+        return label, confidence, explanation
     except Exception as e:
-        return f"Error: {e}"
+        return "ERROR", "N/A", f"Error: {e}"
 
-iface = gr.Interface(
-    fn=classify_input,
-    inputs=[
-        gr.Image(label="🖼️ Upload News Image (Optional)", type="numpy"),
-        gr.Textbox(label="📰 Headline", lines=1, placeholder="Enter headline if not using image"),
-        gr.Textbox(label="🧾 Article Content", lines=6, placeholder="Enter article content if not using image")
-    ],
-    outputs=gr.Textbox(label="📣 Factify's Verdict"),
-    title="Factify — Fake News Classifier",
-    description=(
-        "**Factify** uses PaddleOCR to read image-based news and LLaMA 3 (via Ollama) to evaluate whether it is **REAL or FAKE**, with a confidence score and explanation.\n\n"
-        "💡 Upload an image or enter text manually. Powered by local AI models."
-    ),
-    examples=examples,  # using the imported variable
-    allow_flagging="never",
-    theme="default"
-)
+def extract_facts(llm_response):
+    label = "UNKNOWN"
+    confidence = "N/A"
+    explanation = llm_response.strip()
+
+    # Extract label
+    label_match = re.search(r"Label:\s*(REAL|FAKE)", llm_response, re.IGNORECASE)
+    if label_match:
+        label = label_match.group(1).upper()
+
+    # Extract confidence
+    conf_match = re.search(r"Confidence:\s*(\d+%?)", llm_response)
+    if conf_match:
+        confidence = conf_match.group(1)
+
+    # Extract reason (optional improvement)
+    reason_match = re.search(r"Reason:\s*(.+)", llm_response, re.DOTALL)
+    if reason_match:
+        explanation = reason_match.group(1).strip()
+
+    return label, confidence, explanation
+
+# For display purposes only
+examples_for_display = [
+    [
+        img,
+        headline if headline else "N/A",
+        article if article else "N/A"
+    ]
+    for img, headline, article in examples_raw
+]
+
+# Gradio UI layout
+with gr.Blocks(theme=custom_theme, fill_height=True) as demo:
+    # Orange Header
+    gr.Markdown(
+        "<h1 style='text-align:center; color:#ea580c;'>Factify: Fake News Classifier</h1>"
+    )
+    
+    # Orange Subheader
+    gr.Markdown(
+        "<h3 style='text-align:center; color:#ea580c;'>Upload a news screenshot or paste the headline + article below</h3>"
+    )
+
+    with gr.Row():
+        with gr.Column():
+            image_input = gr.Image(label="Upload News Image (Optional)", type="numpy")
+            headline_input = gr.Textbox(label="Headline", placeholder="Enter the news headline or N/A")
+            article_input = gr.Textbox(label="Full Article", lines=10, placeholder="Paste the article text or N/A")
+            submit_btn = gr.Button("🔍 Analyze", elem_id="analyze-btn")
+
+        with gr.Column():
+            output_label = gr.Textbox(label="Prediction (Real or Fake)")
+            confidence_score = gr.Textbox(label="Confidence Score")
+            llm_explanation = gr.Textbox(label="LLM Explanation", lines=6)
+
+    submit_btn.click(
+        fn=classify_input,
+        inputs=[image_input, headline_input, article_input],
+        outputs=[output_label, confidence_score, llm_explanation]
+    )
+
+    with gr.Accordion("Try Examples", open=False):
+        try:
+            from examples import examples
+            gr.Examples(
+                examples=examples_for_display,
+                inputs=[image_input, headline_input, article_input],
+                label="Try these examples"
+            )
+        except Exception:
+            gr.Markdown("No examples loaded.")
 
 if __name__ == "__main__":
-    iface.launch()
+    demo.launch()

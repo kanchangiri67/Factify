@@ -14,3 +14,9 @@ flagged/
 
 # VS Code settings
 .vscode/
+
+*.tar
+*.tar.gz
+.DS_Store
+.cache/
+*.zip

@@ -12,7 +12,7 @@ How it Works:
 - Upload a news screenshot or type in a headline + article
 - PaddleOCR reads the text (if image is uploaded)
 - If text input is submitted, the model directly uses llama3 as image-to-text generation is not needed.
-- Ollama uses large language model LLM, llama3, to analyze the content. The llama3 model is given a custom prompt to act like a fact-checking assistant each time the user provides input.
+- Ollama uses large language model LLM, llama3, to analyze the content. The llama3 model is given a custom prompt to act like a fact-checking assistant each time the user provides input. Using large language model to act as a fact-checking assistant worked comparatively better than available trained fake news classification model. The other models were identifying fake news correctly most of the time but also marking true news as fake which didn't happen using llama3. 
 
 You get:
 
@@ -124,16 +124,17 @@ python app.py
 ## Project Structure
 ```
 FACTIFY/
-└── root/
-├── pycache/ # Compiled Python cache
-├── flagged/ # Gradio logs or flagged outputs
-├── images/ # Sample news screenshots
-│ ├── article1.jpeg
-│ ├── article2.png
-│ └── article4.jpg
-├── venv/ # Python virtual environment (not pushed to Git)
-├── app.py # Main application
-├── examples.py # Gradio preloaded examples
-├── README.md # Project documentation
-└── requirements.txt # Python dependencies
+├── __pycache__/                  # Compiled Python files
+├── alternate_models_research/   # Notebooks exploring other models
+│   └── Fake_New_Classifier_Research.ipynb
+├── images/                      # Sample news screenshots
+├── theme/                       # Custom Gradio UI theme
+│   ├── __pycache__/
+│   └── factify_theme.py
+├── venv310/                     # Python 3.10 virtual environment (not pushed to Git)
+├── .gitignore                   # Git ignored files and folders
+├── app.py                       # Main Gradio application
+├── examples.py                  # Preloaded image and text examples
+├── README.md                    # Project documentation
+└── requirements.txt             # Python dependencies
 ```
