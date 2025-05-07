@@ -11,7 +11,8 @@ How it Works:
 
 - Upload a news screenshot or type in a headline + article
 - PaddleOCR reads the text (if image is uploaded)
-- Ollama uses an LLM (like TinyLLaMA) to analyze the content
+- If text input is submitted, the model directly uses llama3 as image-to-text generation is not needed.
+- Ollama uses large language model LLM, llama3, to analyze the content. The llama3 model is given a custom prompt to act like a fact-checking assistant each time the user provides input.
 
 You get:
 
@@ -51,10 +52,11 @@ Verify:
 python --version
 # Should output: Python 3.10.x
 ```
-##### MacOS
 
-```
-brew install python@3.10
+##### MacOS command for installation of Python version 3.10
+
+``` bash
+brew install python@3.10 # if using brew for installation
 echo 'alias python="python3.10"' >> ~/.zshrc
 source ~/.zshrc
 ```
@@ -63,37 +65,60 @@ source ~/.zshrc
 
 - Visit: https://ollama.com/download
 - Download and install Ollama for your OS
-- Start Ollama in the background (ollama run llama3)
+- Start Ollama in the background 
+
+``` bash
+ollama run llama3 # How to run llama3 using ollama
+```
 
 ---
 
 ### Step 3: Clone the project and Navigate to it
-git clone https://github.com/yourusername/factify.git
-cd factify
 
+```bash
+git clone https://github.com/yourusername/factify.git
+cd FACTIFY
+```
 ---
 
 ### Step 4: Create and Activate a Virtual Environment
 
-#### Create virtual environment
-python -m venv venv
+#### Create virtual environment with Python 3.10
+
+``` bash
+python -3.10 -m venv venv
+```
 
 #### Activate it
+```bash
 venv\Scripts\activate         # On Windows
+```
 #### OR
+```bash
 source venv/bin/activate      # On Mac/Linux
+```
+
+It is better to have a conda environment set up to use the PaddleOCR for text-to-image generation. Conda environment allows better threading via PaddlePaddle and can automatically use multiple CPU cores if available in the local machine. Below are the instructions for activating conda environment with Python 3.10. 
+
+```bash
+conda create -n paddle_env python=3.10 # Potentially need to install conda and if the application is not already installed
+conda activate paddle_env
+```
 
 ---
 
 ### Step 5: Install Requirements
+
+```bash
 pip install --upgrade pip
 pip install -r requirements.txt
-
+```
 ---
 
 ### Step 6: Run the App
+```bash
 python app.py
-
+```
 ---
 
 ## Project Structure

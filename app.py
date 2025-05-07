@@ -23,7 +23,7 @@ News Content:
 
 Return your response in this format:
 Label: REAL or FAKE
-Confidence: [0.0 to 1.0]
+Confidence: [1% to 100%]
 Reason: [short explanation]
 """
 
