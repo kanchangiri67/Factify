@@ -3,7 +3,6 @@ from PIL import Image
 import numpy as np
 import gradio as gr
 import ollama
-import io
 import re
 
 #Local imports
